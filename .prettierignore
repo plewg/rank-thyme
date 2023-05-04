@@ -1,0 +1,10 @@
+node_modules
+/dist/
+/.husky/_/
+*.tgz
+tsconfig.tsbuildinfo
+/.direnv/
+/.env
+/.next
+/.vscode/settings.json
+/pnpm-lock.yaml

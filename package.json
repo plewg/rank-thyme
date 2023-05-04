@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
+        "prebuild": "tsx src/env.ts",
         "build": "next build",
         "dev": "next dev",
         "postinstall": "prisma generate",
@@ -50,6 +51,7 @@
         "prettier-plugin-tailwindcss": "^0.2.6",
         "prisma": "^4.11.0",
         "tailwindcss": "^3.3.0",
+        "tsx": "^3.12.7",
         "typescript": "^5.0.2"
     },
     "ct3aMetadata": {
