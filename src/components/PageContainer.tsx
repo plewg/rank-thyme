@@ -14,7 +14,7 @@ export function PageContainer({ children }: Props) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="flex h-full w-full flex-col items-center">
-                <h1 className="pt-12 text-5xl italic">Rank Thyme</h1>
+                <h1 className="my-12 text-5xl">Rank Thyme</h1>
                 {children}
             </div>
         </>
