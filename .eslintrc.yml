@@ -1,8 +1,8 @@
 root: true
 extends:
-    - "@pentible/eslint-config"
-    - "@pentible/eslint-config-node"
-    - "@pentible/eslint-config-web"
-    - "@pentible/eslint-config-react"
-    - "@pentible/eslint-config-next"
-    - "@pentible/eslint-config-prettier"
+  - "@pentible/eslint-config"
+  - "@pentible/eslint-config-node"
+  - "@pentible/eslint-config-web"
+  - "@pentible/eslint-config-react"
+  - "@pentible/eslint-config-next"
+  - "@pentible/eslint-config-prettier"
