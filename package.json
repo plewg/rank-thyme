@@ -6,8 +6,8 @@
         "prebuild": "tsx src/env.ts",
         "build": "next build",
         "dev": "next dev",
-        "postinstall": "prisma generate",
         "lint": "next lint",
+        "prepare": "cp -n .env.example .env || true; husky install && prisma generate",
         "start": "next start"
     },
     "dependencies": {

@@ -4,6 +4,14 @@
 -   direnv
 -   docker
 
+## setup
+
+```bash
+pnpm i
+docker compose up -d
+pnpm dev
+```
+
 # Create T3 App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with
