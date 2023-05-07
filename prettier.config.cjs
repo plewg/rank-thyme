@@ -5,7 +5,6 @@ const config = {
         require.resolve("prettier-plugin-tailwindcss"),
         require.resolve("prettier-plugin-packagejson"),
     ],
-    tabWidth: 4,
 };
 
 module.exports = config;
