@@ -7,7 +7,7 @@
         "build": "next build",
         "dev": "next dev",
         "lint": "next lint",
-        "prepare": "cp -n .env.example .env || true; pnpm husky install && pnpm prisma generate",
+        "prepare": "cp -n .env.example .env || true; npx husky install && npx prisma generate",
         "start": "next start"
     },
     "dependencies": {
