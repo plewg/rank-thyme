@@ -41,15 +41,30 @@ export function PageContainer({ children }: Props) {
                     <feOffset in="blue_" dx="-2" dy="0" result="blue" />
                     <feBlend mode="screen" in="red" in2="blue" />
                 </filter>
+                <filter id="noiseFilter">
+                    <feTurbulence
+                        type="fractalNoise"
+                        baseFrequency="0.65"
+                        numOctaves="3"
+                        stitchTiles="stitch"
+                    />
+                </filter>
             </svg>
 
             <div className="flex h-full w-full flex-col items-center">
+                <div
+                    className="pointer-events-none absolute h-full w-full"
+                    style={{ WebkitFilter: "url(#noiseFilter)" }}
+                />
                 <Link href="/">
                     <h1
-                        className="my-12 text-5xl text-purple-200"
-                        style={{ WebkitFilter: "url(#kill)" }}
+                        className="beepis my-12 text-5xl text-purple-300"
+                        style={{
+                            WebkitFilter: "url(#kill)",
+                        }}
                     >
                         Rank Thyme
+                        <div className="beepis" />
                     </h1>
                 </Link>
                 {children}
