@@ -1,4 +1,5 @@
 import type { Option } from "@prisma/client";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { ReactSortable } from "react-sortablejs";
@@ -24,6 +25,7 @@ function View({ id }: { id: string }) {
     );
     const { mutate } = api.poll.vote.useMutation({
         onSuccess: () => {
+            localStorage.setItem(id, "true");
             void router.push(`/poll/results/${id}`);
         },
     });
@@ -31,6 +33,8 @@ function View({ id }: { id: string }) {
     if (isLoading || !data || !options) {
         return <LoadingSpinner />;
     }
+
+    const voted = Boolean(localStorage.getItem(id)?.length);
 
     return (
         <PageContainer>
@@ -52,15 +56,27 @@ function View({ id }: { id: string }) {
                         </div>
                     ))}
                 </ReactSortable>
-                <button
-                    type="submit"
-                    className="h-9 w-full rounded-md border-2 border-white bg-blue-300 italic text-white focus:border-blue-500"
-                    onClick={() => {
-                        mutate({ id, options: options.map(({ id }) => id) });
-                    }}
-                >
-                    Vote
-                </button>
+                {voted ? (
+                    <Link
+                        className="flex h-9 w-full flex-col items-center justify-center rounded-md border-2 border-white bg-blue-300 italic text-white focus:border-blue-500"
+                        href={`/poll/results/${id}`}
+                    >
+                        <div>View Results</div>
+                    </Link>
+                ) : (
+                    <button
+                        type="submit"
+                        className="h-9 w-full rounded-md border-2 border-white bg-blue-300 italic text-white focus:border-blue-500"
+                        onClick={() => {
+                            mutate({
+                                id,
+                                options: options.map(({ id }) => id),
+                            });
+                        }}
+                    >
+                        Vote
+                    </button>
+                )}
             </div>
         </PageContainer>
     );
