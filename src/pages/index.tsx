@@ -77,7 +77,7 @@ export default function Home() {
                             <ErrorMessage message={errors.name.message} />
                         )}
                     </label>
-                    <label className="flex w-full flex-col">
+                    {/* <label className="flex w-full flex-col">
                         Password:
                         <input
                             type="password"
@@ -90,7 +90,7 @@ export default function Home() {
                         {errors.password?.message !== undefined && (
                             <ErrorMessage message={errors.password.message} />
                         )}
-                    </label>
+                    </label> */}
                     <label className="flex flex-grow flex-col">
                         Add option:
                         <div className="flex flex-row items-center">
