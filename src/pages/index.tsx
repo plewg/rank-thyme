@@ -1,97 +1,155 @@
-import { useState } from "react";
-import type { ItemInterface } from "react-sortablejs";
-import { ReactSortable } from "react-sortablejs";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/router";
+import { Fragment, useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import type { z } from "zod";
 import { PageContainer } from "~/components/PageContainer";
+import { createPollSchema } from "~/schemas/poll";
+import { api } from "~/utils/api";
 
-interface ItemType extends ItemInterface {
-    name: string;
-}
+type PollValidationSchema = z.infer<typeof createPollSchema>;
 
 export default function Home() {
-    const [password, setPassword] = useState("");
-    const [pollName, setPollName] = useState("");
+    const router = useRouter();
     const [newOption, setNewOption] = useState("");
-    const [options, setOptions] = useState<ItemType[]>([]);
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        control,
+    } = useForm<PollValidationSchema>({
+        resolver: zodResolver(createPollSchema),
+    });
+
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "options",
+    });
+
+    const { mutate } = api.poll.create.useMutation({
+        onSuccess: (data) => {
+            void router.push(`/poll/vote/${data.id}`);
+        },
+    });
 
     return (
         <PageContainer>
-            <div className="flex h-full flex-col items-center gap-3">
-                <button
-                    type="submit"
-                    className="h-9 w-56 rounded-md border-2 border-white bg-blue-300 italic text-white focus:border-blue-500"
-                    onClick={() => true}
-                >
-                    Create
-                </button>
-                <label className="flex flex-col">
-                    Poll Name:
-                    <input
-                        value={pollName}
-                        onChange={(e) => setPollName(e.currentTarget.value)}
-                        type="text"
-                        className="my-1 h-8 w-56 rounded-md border-2 border-blue-300 bg-white p-1"
-                    />
-                </label>
-                <label className="flex flex-col">
-                    Password:
-                    <input
-                        value={password}
-                        onChange={(e) => setPassword(e.currentTarget.value)}
-                        type="password"
-                        className="my-1 h-8 w-56 rounded-md border-2 border-blue-300 bg-white p-1"
-                    />
-                </label>
-                <form
-                    onSubmit={(e) => {
-                        const alreadyExists = options
-                            .map(({ id }) => id)
-                            .includes(newOption);
+            <form
+                id="addOptionForm"
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    if (newOption.length > 0) {
+                        const optToSet = newOption.trim();
+                        const exists = fields
+                            .map(({ value }) => value)
+                            .includes(optToSet);
 
-                        if (!alreadyExists) {
-                            setOptions([
-                                ...options,
-                                { id: newOption, name: newOption },
-                            ]);
+                        if (!exists) {
+                            append({ value: optToSet });
                         }
-                        setNewOption("");
-                        e.preventDefault();
-                    }}
-                >
-                    <label className="flex flex-col">
-                        Add option (enter to add):
-                        <input
-                            value={newOption}
-                            onChange={(e) =>
-                                setNewOption(e.currentTarget.value)
-                            }
-                            type="text"
-                            className="my-1 h-8 w-56 rounded-md border-2 border-blue-300 bg-white p-1"
-                        />
-                    </label>
-                </form>
+                    }
+                    setNewOption("");
+                }}
+            />
 
-                <ReactSortable list={options} setList={setOptions}>
-                    <div className="flex flex-col gap-1">
-                        {options.map((option) => (
-                            <button
-                                className="h-9 w-56 rounded-md border-2 border-white bg-blue-300 italic text-white"
-                                type="button"
-                                onClick={() =>
-                                    setOptions(
-                                        options.filter(
-                                            ({ id }) => id !== option.id,
-                                        ),
-                                    )
+            <form
+                onSubmit={(e) => void handleSubmit((data) => mutate(data))(e)}
+            >
+                <div className="flex h-full w-56 flex-col items-center gap-3">
+                    <button
+                        type="submit"
+                        className="h-9 w-full rounded-md border-2 border-white bg-blue-300 italic text-white focus:border-blue-500"
+                    >
+                        Create
+                    </button>
+                    <label className="flex w-full flex-col">
+                        Poll Name:
+                        <input
+                            type="text"
+                            className={`my-1 h-8 w-full rounded-md border-2 border-blue-300 bg-white p-1 ${
+                                errors.name ? "border-red-500" : ""
+                            }`}
+                            id="name"
+                            {...register("name")}
+                        />
+                        {errors.name?.message !== undefined && (
+                            <ErrorMessage message={errors.name.message} />
+                        )}
+                    </label>
+                    <label className="flex w-full flex-col">
+                        Password:
+                        <input
+                            type="password"
+                            className={`my-1 h-8 w-full rounded-md border-2 border-blue-300 bg-white p-1 ${
+                                errors.password ? "border-red-500" : ""
+                            }`}
+                            id="password"
+                            {...register("password")}
+                        />
+                        {errors.password?.message !== undefined && (
+                            <ErrorMessage message={errors.password.message} />
+                        )}
+                    </label>
+                    <label className="flex flex-grow flex-col">
+                        Add option:
+                        <div className="flex flex-row items-center">
+                            <input
+                                form="addOptionForm"
+                                onChange={(e) =>
+                                    setNewOption(e.currentTarget.value)
                                 }
-                                key={option.id}
+                                type="text"
+                                value={newOption}
+                                className={`my-1 h-8 w-full rounded-md border-2 border-blue-300 bg-white p-1 ${
+                                    errors.options ? "border-red-500" : ""
+                                }`}
+                            />
+                            <button
+                                form="addOptionForm"
+                                type="submit"
+                                className="h-8 w-8 rounded-md border-2 border-white bg-blue-300 italic text-white focus:border-blue-500"
                             >
-                                {option.name}
+                                +
                             </button>
+                        </div>
+                        {errors.options?.message !== undefined && (
+                            <ErrorMessage message={errors.options.message} />
+                        )}
+                    </label>
+
+                    <div className="flex w-full flex-col gap-1">
+                        {fields.map((field, index) => (
+                            <Fragment key={field.id}>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        remove(index);
+                                    }}
+                                    className="h-9 w-full rounded-md border-2 border-slate-400 bg-amber-50 italic focus:border-blue-500"
+                                >
+                                    {field.value}
+                                </button>
+                                <input
+                                    type="text"
+                                    readOnly
+                                    value={field.value}
+                                    hidden
+                                    {...register(`options.${index}.value`)}
+                                />
+                            </Fragment>
                         ))}
                     </div>
-                </ReactSortable>
-                {options.length > 0 && <span>(click an option to remove)</span>}
-            </div>
+
+                    {fields.length > 0 && (
+                        <span>(click an option to remove)</span>
+                    )}
+                </div>
+            </form>
         </PageContainer>
     );
+}
+
+function ErrorMessage({ message }: { message: string }) {
+    return <span className="italic text-red-500">{message}</span>;
 }

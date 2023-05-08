@@ -6,3 +6,5 @@ extends:
   - "@pentible/eslint-config-react"
   - "@pentible/eslint-config-next"
   - "@pentible/eslint-config-prettier"
+rules:
+  react/jsx-props-no-spreading: off
