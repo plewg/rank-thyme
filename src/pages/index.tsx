@@ -48,6 +48,8 @@ export default function Home() {
                         if (!exists) {
                             append({ value: optToSet });
                         }
+                    } else {
+                        void handleSubmit((data) => mutate(data))();
                     }
                     setNewOption("");
                 }}
