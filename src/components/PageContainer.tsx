@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 interface Props {
@@ -14,7 +15,9 @@ export function PageContainer({ children }: Props) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="flex h-full w-full flex-col items-center">
-                <h1 className="my-12 text-5xl">Rank Thyme</h1>
+                <Link href="/">
+                    <h1 className="my-12 text-5xl">Rank Thyme</h1>
+                </Link>
                 {children}
             </div>
         </>
