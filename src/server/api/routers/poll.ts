@@ -61,7 +61,7 @@ export const pollRouter = createTrpcRouter({
                             data: input.options.map((option, index) => ({
                                 id: generateId(),
                                 optionId: option,
-                                rank: index,
+                                rank: index + 1,
                             })),
                         },
                     },
