@@ -39,18 +39,20 @@ function View({ id }: { id: string }) {
         <PageContainer>
             <div className="flex h-full w-56 flex-col items-center gap-3">
                 <div>{data.name}</div>
-                {sortedResults.map((option, i) => (
-                    <div
-                        key={option.id}
-                        className="flex h-9 w-full flex-row items-center justify-center rounded-md border-2 border-slate-400 bg-amber-50 align-middle"
-                    >
-                        <span className="ml-1 flex-1">{i + 1}.</span>
-                        <span>
-                            {option.body} ({option.weightedVote})
-                        </span>
-                        <div className="flex-1" />
-                    </div>
-                ))}
+                <div className="flex w-full flex-col gap-1">
+                    {sortedResults.map((option, i) => (
+                        <div
+                            key={option.id}
+                            className="flex h-9 w-full flex-row items-center justify-center rounded-md border-2 border-slate-400 bg-amber-50 align-middle"
+                        >
+                            <span className="ml-1 flex-1">{i + 1}.</span>
+                            <span>
+                                {option.body} ({option.weightedVote})
+                            </span>
+                            <div className="flex-1" />
+                        </div>
+                    ))}
+                </div>
             </div>
         </PageContainer>
     );
