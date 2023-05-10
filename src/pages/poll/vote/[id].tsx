@@ -1,6 +1,5 @@
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Option } from "@prisma/client";
+import { DragHandleHorizontalIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -55,10 +54,7 @@ function View({ id }: { id: string }) {
                         <span className="ml-1 flex-1 ">{i + 1}.</span>
                         <span>{option.body}</span>
                         <span className="mr-1 flex-1 text-right">
-                            <FontAwesomeIcon
-                                className="text-slate-400"
-                                icon={faBars}
-                            />
+                            <DragHandleHorizontalIcon className="font-bold text-slate-400" />
                         </span>
                     </div>
                 ))}
